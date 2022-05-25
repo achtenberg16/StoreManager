@@ -128,7 +128,7 @@ describe("02-list", () => {
         .expect("status", 200)
         .then((response) => {
           const { json } = response;
-
+         console.log(json)
           expect(json.length).toBe(2);
           expect(json[0]).not.toHaveProperty("id");
           expect(json[0]).not.toHaveProperty("saleId");
