@@ -8,4 +8,13 @@ function getById(id) {
   return connect.execute('SELECT * FROM products WHERE id = ?', [id]);
 }
 
-module.exports = { getAll, getById };
+function getByName(name) {
+  return connect.execute('SELECT * FROM products WHERE name = ?', [name]);
+}
+
+function createProduct(name, quantity) {
+ return connect.execute('INSERT INTO products (name, quantity) VALUES (?, ?)',
+ [name, quantity]);
+}
+
+module.exports = { getAll, getById, getByName, createProduct };

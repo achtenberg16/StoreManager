@@ -8,13 +8,17 @@ const productDTO = Joi.object({
 
 function validateProduct(req, _res, next) {
 const { error } = productDTO.validate(req.body);
-const { type } = error.details[0];
 const errorType = ['string.min', 'number.min'];
-if (errorType.includes(type)) {
-  return next({ status: RESPONSE_CODE.ENTITY, message: error.details[0].message });
-} if (error) {
- return next({ status: RESPONSE_CODE.BAD_REQUEST, message: error.details[0].message });
+
+if (error) {
+  const { type } = error.details[0];
+  const message = error.details[0].message.replace(/\[\d\]./, '');
+  if (errorType.includes(type)) {
+    return next({ status: RESPONSE_CODE.ENTITY, message });
+  }
+  return next({ status: RESPONSE_CODE.BAD_REQUEST, message });
 }
+
 next();
 }
 

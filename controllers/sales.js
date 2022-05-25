@@ -20,7 +20,7 @@ router.get('/', async (_req, res) => {
   res.status(RESPONSE_CODE.OK).json(sales);
 });
 
-router.post('/', validateSale, (req, res) => {
+router.post('/', validateSale, async (req, res) => {
   res.status(RESPONSE_CODE.CREATED).end();
 });
 

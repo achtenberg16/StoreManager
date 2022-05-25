@@ -19,9 +19,10 @@ router.get('/', async (_req, res) => {
   res.status(RESPONSE_CODE.OK).json(products);
 });
 
-router.post('/', validateProduct, (req, res) => {
-  console.log('rodou');
-  res.status(RESPONSE_CODE.CREATED).end();
+router.post('/', validateProduct, async (req, res, next) => {
+  const respose = await productService.createProduct(req.body);
+  if (respose.error) return next({ message: respose.error, status: RESPONSE_CODE.CONFLICT });
+  res.status(201).json(respose);
 });
 
 router.put('/:id', validateProduct, (req, res) => {

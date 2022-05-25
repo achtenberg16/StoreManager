@@ -6,6 +6,7 @@ const RESPONSE_CODE = {
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
   ENTITY: 422,
+  CONFLICT: 409,
 };
 
 const MESSAGES = {
