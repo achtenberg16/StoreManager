@@ -17,4 +17,9 @@ function createProduct(name, quantity) {
  [name, quantity]);
 }
 
-module.exports = { getAll, getById, getByName, createProduct };
+function updateProduct(name, quantity, id) {
+ return connect.execute('UPDATE products SET name = ?, quantity = ? WHERE id = ?',
+  [name, quantity, id]);
+}
+
+module.exports = { getAll, getById, getByName, createProduct, updateProduct };

@@ -25,8 +25,14 @@ router.post('/', validateProduct, async (req, res, next) => {
   res.status(201).json(respose);
 });
 
-router.put('/:id', validateProduct, (req, res) => {
-  res.status(RESPONSE_CODE.ok).json({});
+router.put('/:id', validateProduct, async (req, res, next) => {
+ const { id } = req.params;
+ const product = await productService.getById(id);
+  if (!product.length) {
+    return next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
+  }
+  const respose = await productService.updateProduct({ ...req.body, id });
+  res.status(RESPONSE_CODE.OK).json(respose);
 });
 
 module.exports = router;
