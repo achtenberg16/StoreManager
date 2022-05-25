@@ -23,7 +23,16 @@ async function getById(id) {
   return false;
 }
 
+async function insertSales(sales) {
+const [sale] = await SalesModel.insertSale();
+const { insertId } = sale;
+await Promise.all(sales.map(({ quantity, productId }) => 
+SalesModel.insertSaleProduct(quantity, productId, insertId)));
+return insertId;
+}
+
 module.exports = { 
   getAll,
   getById,
+  insertSales,
 };

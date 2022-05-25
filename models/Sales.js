@@ -19,4 +19,14 @@ function getById(id) {
   ORDER BY sp.product_id`, [id]);
 }
 
-module.exports = { getAll, getById };
+function insertSaleProduct(quantity, productId, saleId) {
+return connect.execute(`INSERT INTO sales_products (sale_id, product_id, quantity)
+VALUES (?, ?, ?)`,
+ [saleId, productId, quantity]);
+}
+
+function insertSale() {
+  return connect.execute('INSERT INTO sales(date) VALUES(now())');
+}
+
+module.exports = { getAll, getById, insertSale, insertSaleProduct };

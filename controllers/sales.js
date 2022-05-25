@@ -21,7 +21,12 @@ router.get('/', async (_req, res) => {
 });
 
 router.post('/', validateSale, async (req, res) => {
-  res.status(RESPONSE_CODE.CREATED).end();
+  const id = await salesService.insertSales(req.body);
+  
+  res.status(RESPONSE_CODE.CREATED).json({
+   id,
+   itemsSold: req.body,
+  });
 });
 
 router.put('/:id', validateSale, (req, res) => {
