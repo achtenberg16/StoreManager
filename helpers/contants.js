@@ -7,4 +7,8 @@ const RESPONSE_CODE = {
   NOT_FOUND: 404,
 };
 
-module.exports = { RESPONSE_CODE };
+const MESSAGES = {
+  productNotFound: 'Product not found',
+  saleNotFound: 'Sale not found',
+};
+module.exports = { RESPONSE_CODE, MESSAGES };
