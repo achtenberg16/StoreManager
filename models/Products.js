@@ -22,4 +22,8 @@ function updateProduct(name, quantity, id) {
   [name, quantity, id]);
 }
 
-module.exports = { getAll, getById, getByName, createProduct, updateProduct };
+function deleteProduct(id) {
+  return connect.execute('DELETE FROM products WHERE id = ?', [id]);
+}
+
+module.exports = { getAll, getById, getByName, createProduct, updateProduct, deleteProduct };

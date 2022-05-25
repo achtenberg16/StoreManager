@@ -35,4 +35,13 @@ router.put('/:id', validateProduct, async (req, res, next) => {
   res.status(RESPONSE_CODE.OK).json(respose);
 });
 
+router.delete('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const product = await productService.getById(id);
+   if (!product.length) {
+     return next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
+   }
+   await productService.deleteProduct(id);
+   res.status(RESPONSE_CODE.NO_CONTENT).end();
+});
 module.exports = router;
