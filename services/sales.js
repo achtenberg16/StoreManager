@@ -25,7 +25,7 @@ async function getById(id) {
 }
 
 async function insertSales(sales) {
-const validateStock = await Promise.all(
+  const validateStock = await Promise.all(
   sales.map(async ({ productId, quantity }) => {
     const [product] = await ProductsModel.getById(productId);
     if (product[0].quantity < +quantity) {
@@ -34,19 +34,20 @@ const validateStock = await Promise.all(
    return true;
    }),
 );
-if (validateStock.includes(false)) { 
-  return { error: 'Such amount is not permitted to sell' }; 
-}
-const [sale] = await SalesModel.insertSale();
-const { insertId } = sale;
-await Promise.all(sales.map(({ quantity, productId }) => 
-SalesModel.insertSaleProduct(quantity, productId, insertId)));
-await Promise.all(sales.map(ProductsModel.incraseProduct));
-return insertId;
+  if (validateStock.includes(false)) { 
+    return { error: 'Such amount is not permitted to sell' }; 
+  }
+  const [sale] = await SalesModel.insertSale();
+  const { insertId } = sale;
+  await Promise.all(sales.map(({ quantity, productId }) => 
+  SalesModel.insertSaleProduct(quantity, productId, insertId)));
+  await Promise.all(sales.map(ProductsModel.incraseProduct));
+  return insertId;
 }
 
 async function updateSales({ productId, quantity, id }) {
   await SalesModel.updateSales(productId, quantity, id);
+  return true;
 }
 
 async function deleteSales(id) {
