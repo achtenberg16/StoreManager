@@ -1,9 +1,5 @@
-const express = require('express');
-const validateProduct = require('../middlewares/validateProduct');
 const { RESPONSE_CODE, MESSAGES } = require('../helpers/contants');
 const productService = require('../services/products');
-
-const router = express.Router();
 
 async function getById(req, res, next) {
   const { id } = req.params;
@@ -45,14 +41,10 @@ async function updateProduct(req, res, next) {
    res.status(RESPONSE_CODE.NO_CONTENT).end();
 }
 
-router.get('/:id', getById);
-
-router.get('/', getAll);
-
-router.post('/', validateProduct, createProduct);
-
-router.put('/:id', validateProduct, updateProduct);
-
-router.delete('/:id', deleteProduct);
-
-module.exports = router;
+module.exports = {
+  getById,
+  getAll,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
