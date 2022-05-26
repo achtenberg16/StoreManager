@@ -31,7 +31,6 @@ router.post('/', validateSale, async (req, res) => {
 
 router.put('/:id', validateSale, async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.body);
   const sale = await salesService.getById(id);
   if (!sale) {
     return next({ message: MESSAGES.saleNotFound, status: RESPONSE_CODE.NOT_FOUND });
@@ -42,5 +41,15 @@ router.put('/:id', validateSale, async (req, res, next) => {
     itemUpdated: req.body,
   });
 });
+
+router.delete('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const sale = await salesService.getById(id);
+  if (!sale) {
+    return next({ message: MESSAGES.saleNotFound, status: RESPONSE_CODE.NOT_FOUND });
+   }
+  await salesService.deleteSales(id);
+  res.status(RESPONSE_CODE.NO_CONTENT).end();
+}); 
 
 module.exports = router;

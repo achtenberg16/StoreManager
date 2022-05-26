@@ -35,9 +35,15 @@ async function updateSales({ productId, quantity, id }) {
   await SalesModel.updateSales(productId, quantity, id);
 }
 
+async function deleteSales(id) {
+ const response = await SalesModel.deleteSales(id);
+ return response;
+}
+
 module.exports = { 
   getAll,
   getById,
   insertSales,
   updateSales,
+  deleteSales,
 };

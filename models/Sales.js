@@ -36,4 +36,8 @@ return connect.execute(
 );
 }
 
-module.exports = { getAll, getById, insertSale, insertSaleProduct, updateSales };
+function deleteSales(id) {
+  return connect.execute('DELETE FROM sales WHERE id = ?', [id]);
+}
+
+module.exports = { getAll, getById, insertSale, insertSaleProduct, updateSales, deleteSales };
