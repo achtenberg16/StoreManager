@@ -72,6 +72,57 @@ describe('controllers sales', () => {
       expect(res.json.calledWith({id: 1, itemsSold: req.body})).to.be.true;
       salesService.insertSales.restore()
     })
-  
   })
+
+  describe('updateSale', () => {
+    const res = {};
+    const req = {body: [{productId: 1, quantity: 1}], params: {id: 1}};
+    before(async () => {
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub()
+      next = sinon.stub()
+    }) 
+
+    it('quando a venda não existe', async() => {
+      sinon.stub(salesService, 'getById').resolves(false);
+      await salesController.updateSales(req, res, next);
+      expect(next.calledWith({ message: 'Sale not found', status: 404 })).to.be.true;
+      salesService.getById.restore()
+    })
+
+    it('quando a venda existe', async() => {
+      sinon.stub(salesService, 'getById').resolves({saleId: 1, productId: 1, quantity: 1});
+
+      await salesController.updateSales(req, res, next);
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledWith({saleId: 1, itemUpdated: req.body})).to.be.true;
+      salesService.getById.restore();
+    })
+  })
+
+  describe('deleteSale', () => {
+    const res = {};
+    const req = {body: [{productId: 1, quantity: 1}], params: {id: 1}};
+    before(async () => {
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub()
+      res.end = sinon.stub()
+      next = sinon.stub()
+    }) 
+    it('quando a venda não existe', async() => {
+      sinon.stub(salesService, 'getById').resolves(false);
+      await salesController.deleteSales(req, res, next);
+      expect(next.calledWith({ message: 'Sale not found', status: 404 })).to.be.true;
+      salesService.getById.restore()
+    })
+
+    it('quando a venda existe', async() => {
+      sinon.stub(salesService, 'getById').resolves({saleId: 1, productId: 1, quantity: 1});
+      await salesController.deleteSales(req, res, next);
+      expect(res.status.calledWith(204)).to.be.true;
+      expect(res.end.calledWith()).to.be.true;
+      salesService.getById.restore();
+    })
+  })
+
 })

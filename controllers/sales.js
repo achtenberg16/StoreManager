@@ -29,6 +29,7 @@ async function insertSales(req, res, next) {
 async function updateSales(req, res, next) {
   const { id } = req.params;
   const sale = await salesService.getById(id);
+
   if (!sale) {
     return next({ message: MESSAGES.saleNotFound, status: RESPONSE_CODE.NOT_FOUND });
    }
