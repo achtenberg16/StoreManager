@@ -20,11 +20,11 @@ router.get('/', async (_req, res) => {
   res.status(RESPONSE_CODE.OK).json(sales);
 });
 
-router.post('/', validateSale, async (req, res) => {
-  const id = await salesService.insertSales(req.body);
-  
+router.post('/', validateSale, async (req, res, next) => {
+  const response = await salesService.insertSales(req.body);
+  if (response.error) return next({ message: response.error, status: RESPONSE_CODE.ENTITY });
   res.status(RESPONSE_CODE.CREATED).json({
-   id,
+   id: response,
    itemsSold: req.body,
   });
 });
@@ -35,6 +35,7 @@ router.put('/:id', validateSale, async (req, res, next) => {
   if (!sale) {
     return next({ message: MESSAGES.saleNotFound, status: RESPONSE_CODE.NOT_FOUND });
    }
+
   await salesService.updateSales({ ...req.body[0], id });
   res.status(RESPONSE_CODE.OK).json({
     saleId: id,

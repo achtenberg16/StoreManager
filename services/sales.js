@@ -25,6 +25,18 @@ async function getById(id) {
 }
 
 async function insertSales(sales) {
+const validateStock = await Promise.all(
+  sales.map(async ({ productId, quantity }) => {
+    const [product] = await ProductsModel.getById(productId);
+    if (product[0].quantity < +quantity) {
+     return false; 
+   }
+   return true;
+   }),
+);
+if (validateStock.includes(false)) { 
+  return { error: 'Such amount is not permitted to sell' }; 
+}
 const [sale] = await SalesModel.insertSale();
 const { insertId } = sale;
 await Promise.all(sales.map(({ quantity, productId }) => 
