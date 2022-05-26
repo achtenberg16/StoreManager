@@ -115,7 +115,8 @@ describe('controllers products', () => {
     const req = {params: {id: 1}};
     before(async () => {
       res.status = sinon.stub().returns(res);
-      res.json = sinon.stub()
+      res.json = sinon.stub();
+      res.end = sinon.stub();
       next = sinon.stub()
     });
    it('quando o produto não existe', async() => {
@@ -127,6 +128,15 @@ describe('controllers products', () => {
     productService.getById.restore();
    })
    
+   it('quando o produto existe', async() => {
+     sinon.stub(productService, 'getById').resolves([{productId: 1, name: 'teste', quantity: 1}]);
+     sinon.stub(productService, 'deleteProduct').resolves();
+     await productsController.deleteProduct(req, res, next);
+     expect(res.status.calledWith(204)).to.be.true;
+     expect(res.end.calledWith()).to.be.true;
+     productService.deleteProduct.restore();
+     productService.getById.restore()
+   })
    
   })
 })
