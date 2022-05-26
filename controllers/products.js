@@ -5,37 +5,37 @@ const productService = require('../services/products');
 
 const router = express.Router();
 
-router.get('/:id', async (req, res, next) => {
+async function getById(req, res, next) {
   const { id } = req.params;
   const [product] = await productService.getById(id);
   if (!product) {
    next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
   } 
   res.status(RESPONSE_CODE.OK).json(product);
-});
+}
 
-router.get('/', async (_req, res) => {
+async function getAll(_req, res) {
   const products = await productService.getAll();
   res.status(RESPONSE_CODE.OK).json(products);
-});
+}
 
-router.post('/', validateProduct, async (req, res, next) => {
+async function createProduct(req, res, next) {
   const respose = await productService.createProduct(req.body);
   if (respose.error) return next({ message: respose.error, status: RESPONSE_CODE.CONFLICT });
   res.status(201).json(respose);
-});
+}
 
-router.put('/:id', validateProduct, async (req, res, next) => {
- const { id } = req.params;
- const product = await productService.getById(id);
-  if (!product.length) {
-    return next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
-  }
-  const respose = await productService.updateProduct({ ...req.body, id });
-  res.status(RESPONSE_CODE.OK).json(respose);
-});
+async function updateProduct(req, res, next) {
+  const { id } = req.params;
+  const product = await productService.getById(id);
+   if (!product.length) {
+     return next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
+   }
+   const respose = await productService.updateProduct({ ...req.body, id });
+   res.status(RESPONSE_CODE.OK).json(respose);
+ }
 
-router.delete('/:id', async (req, res, next) => {
+ async function deleteProduct(req, res, next) {
   const { id } = req.params;
   const product = await productService.getById(id);
    if (!product.length) {
@@ -43,5 +43,16 @@ router.delete('/:id', async (req, res, next) => {
    }
    await productService.deleteProduct(id);
    res.status(RESPONSE_CODE.NO_CONTENT).end();
-});
+}
+
+router.get('/:id', getById);
+
+router.get('/', getAll);
+
+router.post('/', validateProduct, createProduct);
+
+router.put('/:id', validateProduct, updateProduct);
+
+router.delete('/:id', deleteProduct);
+
 module.exports = router;
