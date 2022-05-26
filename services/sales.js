@@ -31,8 +31,13 @@ SalesModel.insertSaleProduct(quantity, productId, insertId)));
 return insertId;
 }
 
+async function updateSales({ productId, quantity, id }) {
+  await SalesModel.updateSales(productId, quantity, id);
+}
+
 module.exports = { 
   getAll,
   getById,
   insertSales,
+  updateSales,
 };

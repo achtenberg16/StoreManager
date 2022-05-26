@@ -26,7 +26,14 @@ VALUES (?, ?, ?)`,
 }
 
 function insertSale() {
-  return connect.execute('INSERT INTO sales(date) VALUES(now())');
+  return connect.execute('UPDATE INTO sales(date) VALUES(now())');
 }
 
-module.exports = { getAll, getById, insertSale, insertSaleProduct };
+function updateSales(productId, quantity, id) {
+return connect.execute(
+  'UPDATE sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?',
+ [quantity, id, productId],
+);
+}
+
+module.exports = { getAll, getById, insertSale, insertSaleProduct, updateSales };

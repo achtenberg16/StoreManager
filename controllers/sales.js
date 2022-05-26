@@ -29,8 +29,18 @@ router.post('/', validateSale, async (req, res) => {
   });
 });
 
-router.put('/:id', validateSale, (req, res) => {
-  res.status(RESPONSE_CODE.OK).end();
+router.put('/:id', validateSale, async (req, res, next) => {
+  const { id } = req.params;
+  console.log(req.body);
+  const sale = await salesService.getById(id);
+  if (!sale) {
+    return next({ message: MESSAGES.saleNotFound, status: RESPONSE_CODE.NOT_FOUND });
+   }
+  await salesService.updateSales({ ...req.body[0], id });
+  res.status(RESPONSE_CODE.OK).json({
+    saleId: id,
+    itemUpdated: req.body,
+  });
 });
 
 module.exports = router;
