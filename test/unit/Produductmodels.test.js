@@ -1,4 +1,3 @@
-const chai = require('chai')
 const ProductsModel = require('../../models/Products')
 const sinon = require('sinon')
 const connect = require('../../db/connect')

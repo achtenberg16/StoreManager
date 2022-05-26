@@ -5,7 +5,7 @@ async function getById(req, res, next) {
   const { id } = req.params;
   const [product] = await productService.getById(id);
   if (!product) {
-   next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
+   return next({ message: MESSAGES.productNotFound, status: RESPONSE_CODE.NOT_FOUND });
   } 
   res.status(RESPONSE_CODE.OK).json(product);
 }
