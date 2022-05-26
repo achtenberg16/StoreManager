@@ -1,4 +1,5 @@
 const SalesModel = require('../models/Sales');
+const ProductsModel = require('../models/Products');
 
 function formatSales({ product_id: productId, sale_id: saleId, quantity, date }) {
  return ({
@@ -28,6 +29,7 @@ const [sale] = await SalesModel.insertSale();
 const { insertId } = sale;
 await Promise.all(sales.map(({ quantity, productId }) => 
 SalesModel.insertSaleProduct(quantity, productId, insertId)));
+await Promise.all(sales.map(ProductsModel.incraseProduct));
 return insertId;
 }
 
@@ -36,6 +38,8 @@ async function updateSales({ productId, quantity, id }) {
 }
 
 async function deleteSales(id) {
+ const [salesResume] = await ProductsModel.getSalesProduct(id);
+ await Promise.all(salesResume.map(ProductsModel.decraseProduct));
  const response = await SalesModel.deleteSales(id);
  return response;
 }

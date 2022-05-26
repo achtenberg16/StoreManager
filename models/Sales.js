@@ -26,7 +26,7 @@ VALUES (?, ?, ?)`,
 }
 
 function insertSale() {
-  return connect.execute('UPDATE INTO sales(date) VALUES(now())');
+  return connect.execute('INSERT INTO sales(date) VALUES(now())');
 }
 
 function updateSales(productId, quantity, id) {

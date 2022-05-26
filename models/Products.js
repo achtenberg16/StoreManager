@@ -22,8 +22,31 @@ function updateProduct(name, quantity, id) {
   [name, quantity, id]);
 }
 
+function incraseProduct({ quantity, productId }) {
+ return connect.execute('UPDATE products SET quantity = quantity - ? WHERE id = ?',
+  [quantity, productId]);
+}
+
+function decraseProduct({ quantity, product_id: productId }) {
+  return connect.execute('UPDATE products SET quantity = quantity + ? WHERE id = ?',
+   [quantity, productId]); 
+}
+
 function deleteProduct(id) {
   return connect.execute('DELETE FROM products WHERE id = ?', [id]);
 }
 
-module.exports = { getAll, getById, getByName, createProduct, updateProduct, deleteProduct };
+function getSalesProduct(id) {
+  return connect.execute('SELECT * FROM sales_products WHERE sale_id = ?', [id]);
+}
+
+module.exports = { getAll,
+getById,
+getByName,
+createProduct,
+updateProduct, 
+deleteProduct,
+getSalesProduct,
+incraseProduct,
+decraseProduct,
+};
